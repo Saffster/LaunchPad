@@ -1,66 +1,65 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { useNavigate } from 'react-router-dom'
+import IdeaCard from '../components/IdeaCard'
 
 export default function Dashboard() {
   const [ideas, setIdeas] = useState([])
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchIdeas = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+    const fetchUserIdeas = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser()
+      if (!user) {
+        navigate('/login')
+        return
+      }
       setUser(user)
 
-      if (user) {
-        const { data, error } = await supabase
-          .from('ideas')
-          .select('*')
-          .eq('user_id', user.id)
+      const { data, error } = await supabase
+        .from('ideas')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
 
-        if (!error) setIdeas(data)
-      }
+      if (!error) setIdeas(data)
+      setLoading(false)
     }
-    fetchIdeas()
+
+    fetchUserIdeas()
   }, [])
 
   const handleDelete = async (id) => {
-    const { error } = await supabase.from('ideas').delete().eq('id', id)
-    if (!error) setIdeas(prev => prev.filter(i => i.id !== id))
-  }
-
-  const handleEdit = (idea) => {
-    navigate('/edit', { state: { idea } })
+    await supabase.from('ideas').delete().eq('id', id)
+    setIdeas((prev) => prev.filter((idea) => idea.id !== id))
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-6">Your Posted Ideas</h2>
-
-      {ideas.length === 0 ? (
-        <p className="text-gray-600">You haven’t posted anything yet.</p>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">My Posted Ideas</h2>
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : ideas.length === 0 ? (
+        <p className="text-center text-gray-500">You haven't posted any ideas yet.</p>
       ) : (
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {ideas.map(idea => (
-            <div
-              key={idea.id}
-              className="bg-white p-4 rounded-lg shadow hover:shadow-md transition"
-            >
-              <span className={`text-xs font-medium px-2 py-1 rounded text-white ${getCategoryColor(idea.category)}`}>
-                {idea.category}
-              </span>
-              <h3 className="mt-2 text-lg font-bold">{idea.title}</h3>
-              <p className="text-sm text-gray-600">{idea.description}</p>
-              <div className="mt-4 flex gap-2">
+        <div className="grid gap-6">
+          {ideas.map((idea) => (
+            <div key={idea.id} className="relative">
+              <IdeaCard idea={idea} />
+              <div className="absolute top-2 right-2 flex space-x-2">
                 <button
-                  onClick={() => handleEdit(idea)}
-                  className="flex-1 bg-blue-500 text-white py-1 rounded hover:bg-blue-600 transition text-sm"
+                  onClick={() => navigate(`/edit/${idea.id}`)}
+                  className="text-sm px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(idea.id)}
-                  className="flex-1 bg-red-500 text-white py-1 rounded hover:bg-red-600 transition text-sm"
+                  className="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
                 </button>
@@ -71,14 +70,4 @@ export default function Dashboard() {
       )}
     </div>
   )
-}
-
-function getCategoryColor(category) {
-  switch (category) {
-    case 'Technology': return 'bg-blue-500'
-    case 'Healthcare': return 'bg-green-500'
-    case 'Finance': return 'bg-purple-500'
-    case 'Education': return 'bg-yellow-500'
-    default: return 'bg-gray-500'
-  }
 }

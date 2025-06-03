@@ -3,44 +3,43 @@ import { supabase } from '../utils/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' })
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    setError('')
-    const { error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password
-    })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) setError(error.message)
     else navigate('/dashboard')
   }
 
   return (
-    <div style={styles.container}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required style={styles.input} />
-        <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required style={styles.input} />
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" style={styles.button}>Log In</button>
+    <div className="flex flex-col items-center justify-center min-h-screen px-4">
+      <h2 className="text-3xl font-bold mb-4">Login</h2>
+      <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4">
+        <input
+          className="w-full border p-2 rounded"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          className="w-full border p-2 rounded"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600" type="submit">
+          Login
+        </button>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
     </div>
   )
-}
-
-const styles = {
-  container: {
-    maxWidth: '400px', margin: '4rem auto', padding: '2rem',
-    borderRadius: '12px', background: '#fff', boxShadow: '0 4px 8px rgba(0,0,0,0.05)', textAlign: 'center'
-  },
-  form: { display: 'flex', flexDirection: 'column', gap: '1rem' },
-  input: { padding: '0.75rem', borderRadius: '8px', border: '1px solid #ccc', fontSize: '1rem' },
-  button: { padding: '0.75rem', background: '#3B82F6', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer' }
 }

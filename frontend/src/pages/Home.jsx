@@ -1,87 +1,14 @@
-import { useNavigate } from 'react-router-dom'
-
-const featuredIdeas = [
-  {
-    id: '1',
-    title: 'AI-Powered Marketing',
-    description: 'Automates digital campaigns with AI.',
-    category: 'Technology',
-    rating: 4.7,
-  },
-  {
-    id: '2',
-    title: 'Personalized Nutrition',
-    description: 'DNA-based nutrition plans.',
-    category: 'Healthcare',
-    rating: 4.2,
-  },
-  {
-    id: '3',
-    title: 'Blockchain Microloans',
-    description: 'Smart contracts for global lending.',
-    category: 'Finance',
-    rating: 4.9,
-  },
-]
+import { Link } from 'react-router-dom'
 
 export default function Home() {
-  const navigate = useNavigate()
-
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="text-center text-white py-20 px-4 bg-gradient-to-r from-indigo-600 to-blue-600">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Share. Collaborate. Innovate.</h1>
-        <p className="text-lg md:text-xl max-w-xl mx-auto mb-6">
-          The marketplace for startup ideas where entrepreneurs meet collaborators and investors.
-        </p>
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={() => navigate('/post')}
-            className="bg-white text-indigo-600 px-6 py-2 rounded-md font-semibold shadow"
-          >
-            Post Your Idea
-          </button>
-          <button
-            onClick={() => navigate('/explore')}
-            className="border border-white text-white px-6 py-2 rounded-md font-semibold"
-          >
-            How It Works
-          </button>
-        </div>
-      </section>
-
-      {/* Featured Section */}
-      <section className="p-8">
-        <h2 className="text-2xl font-semibold mb-4">Featured Startup Ideas</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {featuredIdeas.map((idea) => (
-            <div
-              key={idea.id}
-              className="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-200"
-            >
-              <span className={`text-xs font-medium px-2 py-1 rounded text-white ${
-                getCategoryColor(idea.category)
-              }`}>
-                {idea.category}
-              </span>
-              <h3 className="mt-2 text-lg font-bold">{idea.title}</h3>
-              <p className="text-sm text-gray-600">{idea.description}</p>
-              <p className="mt-2 font-medium text-yellow-600">⭐ {idea.rating}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white flex flex-col justify-center items-center text-center px-4">
+      <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6">Launch Your Startup Idea</h1>
+      <p className="text-gray-600 text-lg max-w-2xl mb-8">Share your ideas, get feedback, and connect with innovators across the world.</p>
+      <div className="space-x-4">
+        <Link to="/explore" className="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600">Explore Ideas</Link>
+        <Link to="/post" className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg text-lg hover:bg-gray-300">Post Your Idea</Link>
+      </div>
     </div>
   )
-}
-
-function getCategoryColor(category) {
-  switch (category) {
-    case 'Technology': return 'bg-blue-500'
-    case 'Healthcare': return 'bg-green-500'
-    case 'Finance': return 'bg-purple-500'
-    case 'Education': return 'bg-yellow-500'
-    default: return 'bg-gray-500'
-  }
 }
