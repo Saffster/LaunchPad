@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS for features Tailwind doesn't cover easily */
+        .gradient-bg {
+            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+        }
+        .idea-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .rating-star:hover {
+            transform: scale(1.2);
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-rocket text-2xl"></i>
+                <span class="text-xl font-bold">Startup Marketplace</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-gray-200">Explore</a>
+                <a href="#" class="hover:text-gray-200">Categories</a>
+                <a href="#" class="hover:text-gray-200">Top Ideas</a>
+                <a href="#" class="hover:text-gray-200">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="loginBtn" class="px-4 py-2 rounded-lg bg-white text-blue-600 font-medium hover:bg-gray-100">Login</button>
+                <button id="registerBtn" class="px-4 py-2 rounded-lg border border-white text-white font-medium hover:bg-white hover:text-blue-600">Register</button>
+                <div id="userMenu" class="hidden flex items-center space-x-2 cursor-pointer">
+                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8">
+                    <span class="text-white">John Doe</span>
+                </div>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-white">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden gradient-bg px-4 pb-4">
+            <a href="#" class="block py-2 text-white hover:bg-blue-700 px-2 rounded">Explore</a>
+            <a href="#" class="block py-2 text-white hover:bg-blue-700 px-2 rounded">Categories</a>
+            <a href="#" class="block py-2 text-white hover:bg-blue-700 px-2 rounded">Top Ideas</a>
+            <a href="#" class="block py-2 text-white hover:bg-blue-700 px-2 rounded">About</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Share. Collaborate. Innovate.</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">The marketplace for startup ideas where entrepreneurs meet collaborators and investors.</p>
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <button id="postIdeaBtn" class="px-6 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-gray-100">Post Your Idea</button>
+                <button class="px-6 py-3 border border-white text-white rounded-lg font-bold hover:bg-blue-700">How It Works</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter -->
+    <section class="bg-white py-8 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="relative w-full md:w-1/2">
+                    <input type="text" placeholder="Search startup ideas..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+                </div>
+                <div class="flex space-x-2 w-full md:w-auto">
+                    <select class="px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>All Categories</option>
+                        <option>Technology</option>
+                        <option>Healthcare</option>
+                        <option>Finance</option>
+                        <option>Education</option>
+                        <option>E-commerce</option>
+                    </select>
+                    <select class="px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option>Sort By</option>
+                        <option>Most Popular</option>
+                        <option>Highest Rated</option>
+                        <option>Newest</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row">
+            <!-- Sidebar Filters -->
+            <aside class="w-full md:w-1/4 lg:w-1/5 pr-0 md:pr-8 mb-8 md:mb-0">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg mb-4">Filters</h3>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium text-gray-700 mb-2">Categories</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500" checked>
+                                <span class="ml-2">Technology</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500" checked>
+                                <span class="ml-2">Healthcare</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500" checked>
+                                <span class="ml-2">Finance</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2">Education</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2">E-commerce</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium text-gray-700 mb-2">Rating</h4>
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="ml-2 text-sm">4+</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-2">Stage</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="stage" class="text-blue-500" checked>
+                                <span class="ml-2">All Stages</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="stage" class="text-blue-500">
+                                <span class="ml-2">Ideation</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="stage" class="text-blue-500">
+                                <span class="ml-2">Prototype</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="stage" class="text-blue-500">
+                                <span class="ml-2">Early Revenue</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Ideas List -->
+            <section class="w-full md:w-3/4 lg:w-4/5">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Featured Startup Ideas</h2>
+                    <div class="flex space-x-2">
+                        <button class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Idea Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Idea Card 1 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=AI+Platform" alt="AI Platform" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                Technology
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">AI-Powered Marketing Platform</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">4.7</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">An AI platform that automates digital marketing campaigns with predictive analytics and personalized content generation.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 3 days ago</span>
+                                <span>24 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">Sarah Johnson</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idea Card 2 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=Health+Tech" alt="Health Tech" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                Healthcare
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Personalized Nutrition App</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">4.2</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">An app that creates customized nutrition plans based on DNA analysis, microbiome testing, and lifestyle factors.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 1 week ago</span>
+                                <span>15 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">Michael Chen</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idea Card 3 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=FinTech" alt="FinTech" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-purple-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                Finance
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Blockchain-Based Microloans</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">4.9</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A decentralized platform connecting lenders with borrowers in developing countries using smart contracts.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 2 days ago</span>
+                                <span>32 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">David Rodriguez</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idea Card 4 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=EdTech" alt="EdTech" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                Education
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">VR Classroom Platform</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">3.8</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">Immersive virtual reality classrooms for remote education with interactive 3D models and collaborative tools.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 2 weeks ago</span>
+                                <span>8 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">Emma Wilson</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idea Card 5 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=E-commerce" alt="E-commerce" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                E-commerce
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">Sustainable Marketplace</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">4.5</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A curated marketplace for eco-friendly products with verified sustainability metrics and carbon offset options.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 5 days ago</span>
+                                <span>19 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">James Peterson</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idea Card 6 -->
+                    <div class="idea-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 ease-in-out">
+                        <div class="relative">
+                            <img src="https://via.placeholder.com/600x400?text=Tech" alt="Tech" class="w-full h-48 object-cover">
+                            <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                Technology
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-bold text-lg">No-Code IoT Platform</h3>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="ml-1 font-medium">4.1</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-4">A drag-and-drop interface for creating IoT applications without programming knowledge.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <span>Posted 3 days ago</span>
+                                <span>12 comments</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8 mr-2">
+                                    <span class="font-medium">Lisa Nguyen</span>
+                                </div>
+                                <button class="text-blue-500 hover:text-blue-700 font-medium">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-center">
+                    <nav class="flex items-center space-x-1">
+                        <button class="px-3 py-1 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="px-4 py-1 rounded-full bg-blue-500 text-white">1</button>
+                        <button class="px-4 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">2</button>
+                        <button class="px-4 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">3</button>
+                        <span class="px-2 text-gray-500">...</span>
+                        <button class="px-4 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">8</button>
+                        <button class="px-3 py-1 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Startup Marketplace</h3>
+                    <p class="text-gray-400">Connecting innovators with collaborators and investors to bring great ideas to life.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Explore</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Popular Ideas</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Categories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Top Contributors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">How It Works</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Stay Connected</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest startup ideas and updates.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg w-full text-gray-800 focus:outline-none">
+                        <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2023 Startup Marketplace. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold">Login</h3>
+                    <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded text-blue-500">
+                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-blue-500 hover:text-blue-700">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Don't have an account? <button id="switchToRegister" class="text-blue-500 hover:text-blue-700 font-medium">Register</button></p>
+                </div>
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid grid-cols-2 gap-3">
+                        <button class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <i class="fab fa-google text-red-500 mr-2"></i> Google
+                        </button>
+                        <button class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <i class="fab fa-linkedin text-blue-600 mr-2"></i> LinkedIn
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold">Create Account</h3>
+                    <button id="closeRegisterModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="registerForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" id="firstName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                            <input type="text" id="lastName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="registerEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="registerEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="registerPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="registerPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="terms" class="rounded text-blue-500" required>
+                        <label for="terms" class="ml-2 text-sm text-gray-600">I agree to the <a href="#" class="text-blue-500 hover:text-blue-700">Terms of Service</a> and <a href="#" class="text-blue-500 hover:text-blue-700">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                        Create Account
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Already have an account? <button id="switchToLogin" class="text-blue-500 hover:text-blue-700 font-medium">Login</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Idea Modal -->
+    <div id="postIdeaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold">Post Your Startup Idea</h3>
+                    <button id="closePostIdeaModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="postIdeaForm" class="space-y-4">
+                    <div>
+                        <label for="ideaTitle" class="block text-sm font-medium text-gray-700 mb-1">Title*</label>
+                        <input type="text" id="ideaTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="What's your startup idea?" required>
+                    </div>
+                    <div>
+                        <label for="ideaCategory" class="block text-sm font-medium text-gray-700 mb-1">Category*</label>
+                        <select id="ideaCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Select a category</option>
+                            <option value="technology">Technology</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="finance">Finance</option>
+                            <option value="education">Education</option>
+                            <option value="e-commerce">E-commerce</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ideaStage" class="block text-sm font-medium text-gray-700 mb-1">Development Stage*</label>
+                        <select id="ideaStage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Select stage</option>
+                            <option value="ideation">Ideation</option>
+                            <option value="prototype">Prototype</option>
+                            <option value="early-revenue">Early Revenue</option>
+                            <option value="scaling">Scaling</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ideaDescription" class="block text-sm font-medium text-gray-700 mb-1">Detailed Description*</label>
+                        <textarea id="ideaDescription" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your idea in detail. What problem does it solve? Who is your target market? What makes it unique?" required></textarea>
+                    </div>
+                    <div>
+                        <label for="ideaImage" class="block text-sm font-medium text-gray-700 mb-1">Upload Image (Optional)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-500 hover:text-blue-700 focus-within:outline-none">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Looking For*</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Co-founders</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Investors</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Developers</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Designers</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Marketers</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded text-blue-500">
+                                <span class="ml-2 text-sm">Feedback</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancelPostIdea" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                            Post Idea
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Idea Detail Modal -->
+    <div id="ideaDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-blue-500 text-white text-sm font-medium mb-2">Technology</span>
+                        <h3 class="text-2xl font-bold">AI-Powered Marketing Platform</h3>
+                    </div>
+                    <button id="closeIdeaDetailModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-2/3">
+                        <div class="mb-6">
+                            <img src="https://via.placeholder.com/800x450?text=AI+Platform" alt="AI Platform" class="w-full rounded-lg">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3">Description</h4>
+                            <p class="text-gray-700">
+                                An AI platform that automates digital marketing campaigns with predictive analytics and personalized content generation. 
+                                The system uses machine learning to analyze customer behavior and optimize marketing strategies in real-time. 
+                                It can generate personalized email campaigns, social media posts, and ad creatives tailored to individual customer preferences.
+                            </p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3">Problem It Solves</h4>
+                            <p class="text-gray-700">
+                                Small and medium businesses often struggle with creating effective digital marketing campaigns due to limited resources and expertise. 
+                                Our platform eliminates the need for large marketing teams by automating the entire process while maintaining personalization and effectiveness.
+                            </p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3">Development Stage</h4>
+                            <div class="flex items-center">
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-500 h-2.5 rounded-full" style="width: 45%"></div>
+                                </div>
+                                <span class="ml-3 text-sm font-medium text-gray-700">Prototype</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-lg mb-3">Looking For</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Developers</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Investors</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Marketers</span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">Feedback</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-6">
+                            <h4 class="font-bold text-lg mb-4">Comments (24)</h4>
+                            
+                            <div class="mb-6">
+                                <div class="flex space-x-3">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-10 h-10">
+                                    <div class="flex-1">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium">Michael Chen</span>
+                                                <span class="text-sm text-gray-500">2 days ago</span>
+                                            </div>
+                                            <p class="text-gray-700">
+                                                This is a great idea! Have you considered integrating with Shopify and WooCommerce for e-commerce businesses?
+                                            </p>
+                                            <div class="flex justify-between items-center mt-3">
+                                                <button class="text-sm text-blue-500 hover:text-blue-700">Reply</button>
+                                                <div class="flex items-center space-x-2">
+                                                    <button class="text-gray-500 hover:text-blue-500">
+                                                        <i class="far fa-thumbs-up"></i> 5
+                                                    </button>
+                                                    <button class="text-gray-500 hover:text-red-500">
+                                                        <i class="far fa-thumbs-down"></i> 0
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Reply -->
+                                        <div class="mt-3 ml-10 pl-3 border-l-2 border-gray-200">
+                                            <div class="flex space-x-3">
+                                                <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8">
+                                                <div class="flex-1">
+                                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                                        <div class="flex justify-between items-center mb-1">
+                                                            <span class="font-medium text-sm">Sarah Johnson</span>
+                                                            <span class="text-xs text-gray-500">1 day ago</span>
+                                                        </div>
+                                                        <p class="text-gray-700 text-sm">
+                                                            Thanks Michael! Yes, e-commerce integrations are definitely on our roadmap.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex space-x-3">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-10 h-10">
+                                    <div class="flex-1">
+                                        <div class="bg-gray-50 p-4 rounded-lg">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium">David Rodriguez</span>
+                                                <span class="text-sm text-gray-500">3 days ago</span>
+                                            </div>
+                                            <p class="text-gray-700">
+                                                How does this compare to existing solutions like HubSpot's AI features?
+                                            </p>
+                                            <div class="flex justify-between items-center mt-3">
+                                                <button class="text-sm text-blue-500 hover:text-blue-700">Reply</button>
+                                                <div class="flex items-center space-x-2">
+                                                    <button class="text-gray-500 hover:text-blue-500">
+                                                        <i class="far fa-thumbs-up"></i> 3
+                                                    </button>
+                                                    <button class="text-gray-500 hover:text-red-500">
+                                                        <i class="far fa-thumbs-down"></i> 1
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <h5 class="font-medium mb-3">Add a comment</h5>
+                                <form class="space-y-3">
+                                    <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Share your thoughts..."></textarea>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                                            Post Comment
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full md:w-1/3">
+                        <div class="bg-gray-50 p-6 rounded-lg sticky top-4">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <img src="https://via.placeholder.com/60" alt="User" class="rounded-full w-12 h-12">
+                                <div>
+                                    <h4 class="font-bold">Sarah Johnson</h4>
+                                    <p class="text-sm text-gray-500">San Francisco, CA</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-medium">Rating</span>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                        <span class="ml-1 font-medium">4.7</span>
+                                        <span class="text-gray-500 ml-1">(28)</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="text-sm w-8">5 stars</span>
+                                        <div class="flex-1 mx-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 70%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm text-gray-500">70%</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-sm w-8">4 stars</span>
+                                        <div class="flex-1 mx-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 20%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm text-gray-500">20%</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-sm w-8">3 stars</span>
+                                        <div class="flex-1 mx-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 7%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm text-gray-500">7%</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-sm w-8">2 stars</span>
+                                        <div class="flex-1 mx-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 2%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm text-gray-500">2%</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-sm w-8">1 star</span>
+                                        <div class="flex-1 mx-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-yellow-400 h-1.5 rounded-full" style="width: 1%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-sm text-gray-500">1%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h5 class="font-medium mb-2">Rate this idea</h5>
+                                <div class="flex space-x-1">
+                                    <button class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition"><i class="far fa-star"></i></button>
+                                    <button class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition"><i class="far fa-star"></i></button>
+                                    <button class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition"><i class="far fa-star"></i></button>
+                                    <button class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition"><i class="far fa-star"></i></button>
+                                    <button class="rating-star text-2xl text-gray-300 hover:text-yellow-400 transition"><i class="far fa-star"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <button class="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                                    <i class="fas fa-envelope mr-2"></i> Contact Founder
+                                </button>
+                                <button class="w-full py-2 px-4 border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium rounded-lg">
+                                    <i class="fas fa-heart mr-2"></i> Save Idea
+                                </button>
+                                <button class="w-full py-2 px-4 border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium rounded-lg">
+                                    <i class="fas fa-flag mr-2"></i> Report
+                                </button>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <h5 class="font-medium mb-2">Similar Ideas</h5>
+                                <div class="space-y-3">
+                                    <a href="#" class="block p-3 hover:bg-gray-100 rounded-lg">
+                                        <h6 class="font-medium">Automated Content Creation Tool</h6>
+                                        <p class="text-sm text-gray-500">Technology • 4.2 rating</p>
+                                    </a>
+                                    <a href="#" class="block p-3 hover:bg-gray-100 rounded-lg">
+                                        <h6 class="font-medium">AI for Social Media Marketing</h6>
+                                        <p class="text-sm text-gray-500">Technology • 4.5 rating</p>
+                                    </a>
+                                    <a href="#" class="block p-3 hover:bg-gray-100 rounded-lg">
+                                        <h6 class="font-medium">Predictive Analytics for E-commerce</h6>
+                                        <p class="text-sm text-gray-500">E-commerce • 4.0 rating</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dashboard (Hidden by default) -->
+    <div id="userDashboard" class="hidden">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Sidebar -->
+                <aside class="w-full md:w-1/4 lg:w-1/5">
+                    <div class="bg-white p-6 rounded-lg shadow-sm sticky top-4">
+                        <div class="flex flex-col items-center mb-6">
+                            <img src="https://via.placeholder.com/100" alt="User" class="rounded-full w-20 h-20 mb-3">
+                            <h3 class="font-bold text-lg">John Doe</h3>
+                            <p class="text-gray-500 text-sm">San Francisco, CA</p>
+                            <button class="mt-2 text-sm text-blue-500 hover:text-blue-700">Edit Profile</button>
+                        </div>
+                        
+                        <nav class="space-y-1">
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg font-medium">
+                                <i class="fas fa-chart-line w-5"></i>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-lightbulb w-5"></i>
+                                <span>My Ideas</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-comment w-5"></i>
+                                <span>Comments</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-heart w-5"></i>
+                                <span>Saved Ideas</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-bell w-5"></i>
+                                <span>Notifications</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-cog w-5"></i>
+                                <span>Settings</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                                <i class="fas fa-sign-out-alt w-5"></i>
+                                <span>Logout</span>
+                            </a>
+                        </nav>
+                    </div>
+                </aside>
+                
+                <!-- Main Content -->
+                <main class="w-full md:w-3/4 lg:w-4/5">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h2 class="text-xl font-bold mb-6">Dashboard Overview</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Posted Ideas</p>
+                                        <h3 class="text-2xl font-bold">5</h3>
+                                    </div>
+                                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                </div>
+                                <a href="#" class="mt-2 inline-block text-sm text-blue-500 hover:text-blue-700">View All</a>
+                            </div>
+                            
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Total Comments</p>
+                                        <h3 class="text-2xl font-bold">42</h3>
+                                    </div>
+                                    <div class="p-2 bg-green-100 rounded-lg text-green-600">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                </div>
+                                <a href="#" class="mt-2 inline-block text-sm text-green-500 hover:text-green-700">View All</a>
+                            </div>
+                            
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Average Rating</p>
+                                        <h3 class="text-2xl font-bold">4.2</h3>
+                                    </div>
+                                    <div class="p-2 bg-purple-100 rounded-lg text-purple-600">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <a href="#" class="mt-2 inline-block text-sm text-purple-500 hover:text-purple-700">View Details</a>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-bold mb-4">Recent Activity</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600 mt-1">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">
+                                            <span class="font-medium">Michael Chen</span> commented on your idea <a href="#" class="text-blue-500 hover:text-blue-700">"AI-Powered Marketing Platform"</a>
+                                        </p>
+                                        <p class="text-sm text-gray-500">2 hours ago</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="p-2 bg-green-100 rounded-lg text-green-600 mt-1">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">
+                                            <span class="font-medium">Sarah Wilson</span> rated your idea <a href="#" class="text-blue-500 hover:text-blue-700">"Sustainable Marketplace"</a> with 5 stars
+                                        </p>
+                                        <p class="text-sm text-gray-500">1 day ago</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="p-2 bg-purple-100 rounded-lg text-purple-600 mt-1">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">
+                                            <span class="font-medium">David Rodriguez</span> sent you a message about potential collaboration
+                                        </p>
+                                        <p class="text-sm text-gray-500">2 days ago</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="p-2 bg-yellow-100 rounded-lg text-yellow-600 mt-1">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-700">
+                                            You posted a new idea <a href="#" class="text-blue-500 hover:text-blue-700">"No-Code IoT Platform"</a>
+                                        </p>
+                                        <p class="text-sm text-gray-500">3 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold">My Startup Ideas</h2>
+                            <button id="dashboardPostIdeaBtn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg">
+                                <i class="fas fa-plus mr-2"></i> Post New Idea
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comments</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="font-medium text-gray-900">AI-Powered Marketing Platform</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Technology</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                                <span>4.7</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-gray-700">24</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-500 hover:text-blue-700 mr-3">Edit</button>
+                                            <button class="text-red-500 hover:text-red-700">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="font-medium text-gray-900">Sustainable Marketplace</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">E-commerce</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                                <span>4.5</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-gray-700">19</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-500 hover:text-blue-700 mr-3">Edit</button>
+                                            <button class="text-red-500 hover:text-red-700">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="font-medium text-gray-900">VR Classroom Platform</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Education</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                                <span>3.8</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-gray-700">8</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-500 hover:text-blue-700 mr-3">Edit</button>
+                                            <button class="text-red-500 hover:text-red-700">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="font-medium text-gray-900">Blockchain-Based Microloans</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Finance</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                                <span>4.9</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-gray-700">32</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">Draft</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-blue-500 hover:text-blue-700 mr-3">Edit</button>
+                                            <button class="text-red-500 hover:text-red-700">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Modal toggles
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        });
+
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        });
+
+        document.getElementById('postIdeaBtn').addEventListener('click', function() {
+            document.getElementById('postIdeaModal').classList.remove('hidden');
+        });
+
+        document.getElementById('dashboardPostIdeaBtn').addEventListener('click', function() {
+            document.getElementById('postIdeaModal').classList.remove('hidden');
+        });
+
+        // Close modals
+        document.getElementById('closeLoginModal').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.add('hidden');
+        });
+
+        document.getElementById('closeRegisterModal').addEventListener('click', function() {
+            document.getElementById('registerModal').classList.add('hidden');
+        });
+
+        document.getElementById('closePostIdeaModal').addEventListener('click', function() {
+            document.getElementById('postIdeaModal').classList.add('hidden');
+        });
+
+        document.getElementById('closeIdeaDetailModal').addEventListener('click', function() {
+            document.getElementById('ideaDetailModal').classList.add('hidden');
+        });
+
+        document.getElementById('cancelPostIdea').addEventListener('click', function() {
+            document.getElementById('postIdeaModal').classList.add('hidden');
+        });
+
+        // Switch between login and register modals
+        document.getElementById('switchToRegister').addEventListener('click', function() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('registerModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closePostIdeaModal').addEventListener('click', function() {
+        document.getElementById('postIdeaModal').classList.add('hidden');
+        document.getElementById('loginModal').classList.remove('hidden');
+});
+</script>
+</body>
+</html>
