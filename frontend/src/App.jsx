@@ -1,19 +1,26 @@
-// src/components/Navbar.jsx
-import { Link } from 'react-router-dom';
-import SupabaseDebugger from "./components/SupabaseDebugger";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Explore from "./pages/Explore";
+import PostIdea from "./pages/PostIdea";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-<SupabaseDebugger />
-export default function Navbar() {
+function App() {
   return (
-    <nav className="bg-white shadow p-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold text-blue-600">LaunchPad</Link>
-      <div className="space-x-4">
-        <Link to="/explore" className="text-gray-700 hover:text-blue-500">Explore</Link>
-        <Link to="/post" className="text-gray-700 hover:text-blue-500">Post Idea</Link>
-        <Link to="/dashboard" className="text-gray-700 hover:text-blue-500">Dashboard</Link>
-        <Link to="/login" className="text-gray-700 hover:text-blue-500">Login</Link>
-        <Link to="/register" className="text-gray-700 hover:text-blue-500">Register</Link>
-      </div>
-    </nav>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/post" element={<PostIdea />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;
