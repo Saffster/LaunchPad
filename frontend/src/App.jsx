@@ -1,6 +1,8 @@
 // src/components/Navbar.jsx
 import { Link } from 'react-router-dom';
+import SupabaseDebugger from "./components/SupabaseDebugger";
 
+<SupabaseDebugger />
 export default function Navbar() {
   return (
     <nav className="bg-white shadow p-4 flex justify-between items-center">
