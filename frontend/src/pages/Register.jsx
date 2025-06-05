@@ -12,10 +12,18 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    const { error } = await signUpUser(email, password);
+
+    console.log("Trying to register user:", email, password); // ✅ Debug log
+
+    const { data, error } = await signUpUser(email, password);
+
+    console.log("Supabase response:", { data, error }); // ✅ Debug log
+
     if (error) {
+      alert("Registration error: " + error.message); // ✅ Alert
       setError(error.message);
     } else {
+      alert("User registered successfully!"); // ✅ Alert
       navigate('/login');
     }
   };
