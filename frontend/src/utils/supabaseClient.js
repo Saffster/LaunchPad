@@ -21,3 +21,4 @@ export const signOutUser = async () => {
   const { error } = await supabase.auth.signOut();
   return { error };
 };
+// new line so i can commit
