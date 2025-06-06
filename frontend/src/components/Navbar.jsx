@@ -1,16 +1,32 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold text-gray-800">LaunchPad 🚀</Link>
-      <div className="space-x-4">
-        <Link to="/explore" className="text-gray-700 hover:text-blue-600">Explore</Link>
-        <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">Dashboard</Link>
-        <Link to="/post" className="text-gray-700 hover:text-blue-600">Post</Link>
-        <Link to="/login" className="text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white">Login</Link>
-        <Link to="/register" className="text-white bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Register</Link>
+    <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="text-xl font-bold">
+          🚀 Startup Marketplace
+        </Link>
+
+        {/* Nav Links */}
+        <nav className="hidden md:flex gap-6 font-medium">
+          <Link to="/explore" className="hover:text-blue-200">Explore</Link>
+          <Link to="/categories" className="hover:text-blue-200">Categories</Link>
+          <Link to="/top" className="hover:text-blue-200">Top Ideas</Link>
+          <Link to="/about" className="hover:text-blue-200">About</Link>
+        </nav>
+
+        {/* Auth Buttons */}
+        <div className="space-x-3">
+          <Link to="/login" className="px-4 py-2 rounded bg-white text-blue-600 hover:bg-blue-100 font-semibold">
+            Login
+          </Link>
+          <Link to="/register" className="px-4 py-2 rounded border border-white hover:bg-white hover:text-blue-600 font-semibold">
+            Register
+          </Link>
+        </div>
       </div>
-    </nav>
-  )
+    </header>
+  );
 }

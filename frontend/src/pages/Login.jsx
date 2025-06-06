@@ -1,52 +1,43 @@
-// src/pages/Login.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signInUser } from '../utils/supabaseClient';
-import SupabaseDebugger from "./components/SupabaseDebugger";
+import { useState } from "react";
+import { supabase } from "../supabaseClient";
 
-<SupabaseDebugger />
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError(null);
-    const { error } = await signInUser(email, password);
-    if (error) {
-      setError(error.message);
-    } else {
-      navigate('/dashboard');
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) alert(error.message);
+    else alert("Logged in!");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
-          required
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-          Log In
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="max-w-md w-full bg-white p-8 rounded shadow">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login to your account</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 border rounded"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border rounded"
+            required
+          />
+          <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
