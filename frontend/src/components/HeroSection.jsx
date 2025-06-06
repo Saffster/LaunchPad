@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function HeroSection() {
   return (
     <section className="bg-gradient-to-br from-blue-500 to-purple-600 text-white py-16 px-4 text-center">
@@ -6,9 +8,19 @@ export default function HeroSection() {
         The marketplace for startup ideas where entrepreneurs meet collaborators and investors.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-100 transition">Post Your Idea</button>
-        <button className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">How It Works</button>
+        <Link
+          to="/post"
+          className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-100 transition"
+        >
+          Post Your Idea
+        </Link>
+        <Link
+          to="/about"
+          className="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition"
+        >
+          How It Works
+        </Link>
       </div>
     </section>
   );
-} 
+}
