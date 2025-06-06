@@ -1,11 +1,53 @@
-# React + Vite
+# React + Vite + Supabase App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React application built with Vite and integrated with Supabase for backend services.
 
-Currently, two official plugins are available:
+## Setup Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Supabase
+
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Update the `.env` file with your Supabase credentials:
+   - `VITE_SUPABASE_URL`: Your Supabase project URL
+   - `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous/public key
+
+You can find these values in your Supabase dashboard:
+
+- Go to Settings → API
+- Copy the "Project URL" and "anon public" key
+
+### 3. Run the Development Server
+
+```bash
+npm run dev
+```
+
+## Environment Variables
+
+The following environment variables are required:
+
+- `VITE_SUPABASE_URL`: Your Supabase project URL
+- `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous key
+
+See `.env.example` for the required format.
+
+## Tech Stack
+
+- **Frontend**: React 19 + Vite
+- **Styling**: Tailwind CSS
+- **Routing**: React Router DOM
+- **Backend**: Supabase
+- **Build Tool**: Vite
 
 ## Expanding the ESLint configuration
 
