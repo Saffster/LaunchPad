@@ -5,12 +5,12 @@ export default function Navbar() {
     <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold">
-          🚀 Startup Marketplace
+        <Link to="/" className="text-xl font-bold flex items-center gap-2">
+          <span role="img" aria-label="rocket">🚀</span> Startup Marketplace
         </Link>
 
         {/* Nav Links */}
-        <nav className="hidden md:flex gap-6 font-medium">
+        <nav className="hidden md:flex gap-8 font-medium">
           <Link to="/explore" className="hover:text-blue-200">Explore</Link>
           <Link to="/categories" className="hover:text-blue-200">Categories</Link>
           <Link to="/top" className="hover:text-blue-200">Top Ideas</Link>
